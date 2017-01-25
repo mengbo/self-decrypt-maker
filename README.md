@@ -4,7 +4,7 @@ self-decrypt-maker is a simple shell script to encrypt a file into a self-decryp
 
 ## Usage example
 
-Run the test.sh script, enter the same password.
+The test.sh script is an example, run the script and enter the password.
 
 ```
 $ ./test.sh 
