@@ -1,15 +1,18 @@
 #!/bin/sh
 
+# The default digest was changed from MD5 to SHA256 in Openssl 1.1
+MD5="-md md5"
+
 cat > $1.self-decrypt.sh << EOF
 #!/bin/sh
 FILE=\`echo \$0 | sed 's/.self-decrypt.sh\$//'\`
 BASE64=\`awk '/^__BASE64_ENCRYPT_BELOW__/ {print NR + 1; exit 0; }' \$0\`
 tail -n+\$BASE64 \$0 |\\
     openssl base64 -d |\\
-    openssl enc -aes-256-cbc -salt -d -out \${FILE}.decrypted ||\\
+    openssl enc -aes-256-cbc -salt -d -out \${FILE}.decrypted $MD5 ||\\
     rm \${FILE}.decrypted
 exit 0
 __BASE64_ENCRYPT_BELOW__
 EOF
 
-openssl enc -aes-256-cbc -salt -in $1 | openssl base64 >> $1.self-decrypt.sh
+openssl enc -aes-256-cbc -salt -in $1 $MD5 | openssl base64 >> $1.self-decrypt.sh
